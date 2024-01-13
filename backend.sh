@@ -1,41 +1,41 @@
-echo disable the nodejs version
+echo -e "\e[36mdisable the nodejs version\e[0m"
 dnf module disable nodejs -y
 
-echo enable the nodejs 18 version
+echo -e "\e[36menable the nodejs 18 version\e[0m"
 dnf module enable nodejs:18 -y
 
-echo install the nodejs
+echo -e "\e[36minstall the nodejs\e[0m"
 dnf install nodejs -y
 
-echo configure the backend service
+echo -e "\e[36mconfigure the backend service\e[0m"
 cp backend.service /etc/systemd/system/backend.service
 
-echo adding the user
+echo -e "\e[36madding the user\e[0m"
 useradd expense
 
-echo removing the default content
+echo -e "\e[36mremoving the default content\e[0m"
 rm -rf /app
 
-echo creating the directory
+echo -e "\e[36mcreating the directory\e[0m"
 mkdir /app
 
-echo download the application content
+echo -e "\e[36mdownload the application content\e[0m"
 curl -o /tmp/backend.zip https://expense-artifacts.s3.amazonaws.com/backend.zip
 cd /app
 
-echo extracting application content
+echo -e "\e[36mextracting application content\e[0m"
 unzip /tmp/backend.zip
 
-echo downloading the application dependencies
+echo -e "\e[36mdownloading the application dependencies\e[0m"
 npm install
 
-echo relaoding the systemd and start the backend srevice
+echo -e "\e[36mrelaoding the systemd and start the backend srevice\e[0m"
 systemctl daemon-reload
 systemctl enable backend
 systemctl start backend
 
-echo install mysql client
+echo -e "\e[36minstall mysql client\e[0m"
 dnf install mysql -y
 
-echo load schema
+echo -e "\e[36mload schema\e[0m"
 mysql -h mysql.madhanmohanreddy.tech -uroot -pExpenseApp@1 < /app/schema/backend.sql

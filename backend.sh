@@ -1,41 +1,41 @@
 echo -e "\e[36mdisable the nodejs\e[0m"
-dnf module disable nodejs -y &>>out
+dnf module disable nodejs -y &>>/tmp/expense.log
 
 echo -e "\e[36menbale the nodejs\e[0m"
-dnf module enable nodejs:18 -y &>>out
+dnf module enable nodejs:18 -y &>>/tmp/expense.log
 
 echo -e "\e[36minstall the nodejs\e[0m"
-dnf install nodejs -y &>>out
+dnf install nodejs -y &>>/tmp/expense.log
 
 echo -e "\e[36mconfigure the backend service\e[0m"
-cp backend.service /etc/systemd/system/backend.service &>>out
+cp backend.service /etc/systemd/system/backend.service &>>/tmp/expense.log
 
 echo -e "\e[36madding the user\e[0m"
-useradd expense &>>out
+useradd expense &>>/tmp/expense.log
 
 echo -e "\e[36mremoving the default content\e[0m"
-rm -rf /app &>>out
+rm -rf /app &>>/tmp/expense.log
 
 echo -e "\e[36mcreating the directory\e[0m"
-mkdir /app &>>out
+mkdir /app &>>/tmp/expense.log
 
 echo -e "\e[36mdownload the backend content\e[0m"
-curl -o /tmp/backend.zip https://expense-artifacts.s3.amazonaws.com/backend.zip &>>out
-cd /app &>>out
+curl -o /tmp/backend.zip https://expense-artifacts.s3.amazonaws.com/backend.zip &>>/tmp/expense.log
+cd /app &>>/tmp/expense.log
 
 echo -e "\e[36mextract the backend content\e[0m"
-unzip /tmp/backend.zip &>>out
+unzip /tmp/backend.zip &>>/tmp/expense.log
 
 echo -e "\e[36minstall the required packages\e[0m"
-npm install &>>out
+npm install &>>/tmp/expense.log
 
 echo -e "\e[36mreload the systemd and start the service"
-systemctl daemon-reload &>>out
-systemctl enable backend &>>out
-systemctl start backend &>>out
+systemctl daemon-reload &>>/tmp/expense.log
+systemctl enable backend &>>/tmp/expense.log
+systemctl start backend &>>/tmp/expense.log
 
 echo -e "\e[36m install the mysql client\e[0m"
-dnf install mysql -y &>>out
+dnf install mysql -y &>>/tmp/expense.log
 
 echo -e "\e[36m reload the schema\e[0m"
-mysql -h mysql.madhanmohanreddy.tech -uroot -pExpenseApp@1 < /app/schema/backend.sql &>>out
+mysql -h mysql.madhanmohanreddy.tech -uroot -pExpenseApp@1 < /app/schema/backend.sql &>>/tmp/expense.log

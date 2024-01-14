@@ -39,4 +39,4 @@ echo -e "\e[36m install the mysql client\e[0m"
 dnf install mysql -y &>>$log_file
 
 echo -e "\e[36m reload the schema\e[0m"
-mysql -h mysql.madhanmohanreddy.tech -uroot -p${1} < /app/schema/backend.sql &>>$log_file
+mysql -h mysql.madhanmohanreddy.tech -uroot -p$1 < /app/schema/backend.sql &>>$log_file

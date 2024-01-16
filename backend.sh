@@ -1,7 +1,7 @@
 mysql_password=$1
 log_file=/tmp/expense.log
 
-head(){
+head() {
   echo -e "\e[36m$1\e[0m"
 }
 

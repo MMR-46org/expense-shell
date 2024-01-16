@@ -5,7 +5,7 @@ head(){
   echo -e "\e[36m$1\e[0m"
 }
 
-head disable the nodejs
+head "disable the nodejs"
 dnf module disable nodejs -y &>>$log_file
 head "enbale the nodejs"
 dnf module enable nodejs:18 -y &>>$log_file

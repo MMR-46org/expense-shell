@@ -1,42 +1,47 @@
 mysql_password=$1
 log_file=/tmp/expense.log
-echo -e "\e[36mdisable the nodejs\e[0m"
+
+head(){
+  echo -e "\e[36m$1\e[0m"
+}
+
+head disable the nodejs
 dnf module disable nodejs -y &>>$log_file
-echo -e "\e[36menbale the nodejs\e[0m"
+head "enbale the nodejs"
 dnf module enable nodejs:18 -y &>>$log_file
 
-echo -e "\e[36minstall the nodejs\e[0m"
+head "install the nodejs"
 dnf install nodejs -y &>>$log_file
 
-echo -e "\e[36mconfigure the backend service\e[0m"
+head "configure the backend service"
 cp backend.service /etc/systemd/system/backend.service &>>$log_file
 
-echo -e "\e[36madding the user\e[0m"
+head "adding the user"
 useradd expense &>>$log_file
 
-echo -e "\e[36mremoving the default content\e[0m"
+head "removing the default content"
 rm -rf /app &>>$log_file
 
-echo -e "\e[36mcreating the directory\e[0m"
+head "creating the directory"
 mkdir /app &>>$log_file
 
-echo -e "\e[36mdownload the backend content\e[0m"
+head "download the backend content"
 curl -o /tmp/backend.zip https://expense-artifacts.s3.amazonaws.com/backend.zip &>>$log_file
 cd /app &>>$log_file
 
-echo -e "\e[36mextract the backend content\e[0m"
+head "extract the backend content"
 unzip /tmp/backend.zip &>>$log_file
 
-echo -e "\e[36minstall the required packages\e[0m"
+head "install the required packages"
 npm install &>>$log_file
 
-echo -e "\e[36mreload the systemd and start the service"
+head "reload the systemd and start the service"
 systemctl daemon-reload &>>$log_file
 systemctl enable backend &>>$log_file
 systemctl start backend &>>$log_file
 
-echo -e "\e[36m install the mysql client\e[0m"
+head " install the mysql client"
 dnf install mysql -y &>>$log_file
 
-echo -e "\e[36m reload the schema\e[0m"
+head " reload the schema"
 mysql -h mysql.madhanmohanreddy.tech -uroot -p${mysql_password} < /app/schema/backend.sql &>>$log_file

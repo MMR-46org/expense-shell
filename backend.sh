@@ -1,47 +1,63 @@
 log_file=/tmp/expense.log
 
-echo "disable the nodejs"
+head (){
+  echo -e "\e[36m$1\e[0m"
+}
+
+head "disable the nodejs"
 dnf module disable nodejs -y &>>log_file
+echo $?
 
-echo "enable the nodejs"
+head "enable the nodejs"
 dnf module enable nodejs:18 -y &>>log_file
+echo $?
 
-echo "install the nodejs"
+head "install the nodejs"
 dnf install nodejs -y &>>log_file
+echo $?
 
-echo "configure the backend service"
+head "configure the backend service"
 cp backend.service /etc/systemd/system/backend.service &>>log_file
+echo $?
 
-echo "adding user"
+head "adding user"
 useradd expense &>>log_file
+echo $?
 
-echo "removing the default content"
+head "removing the default content"
 rm -rf /app &>>log_file
+echo $?
 
-echo "create directory"
+head "create directory"
 mkdir /app &>>log_file
+echo $?
 
-echo "download the application content"
+head "download the application content"
 curl -o /tmp/backend.zip https://expense-artifacts.s3.amazonaws.com/backend.zip &>>log_file
+echo $?
 
-echo "change directory"
+head "change directory"
 cd /app &>>log_file
+echo $?
 
-echo " extract the application content"
+head " extract the application content"
 unzip /tmp/backend.zip &>>log_file
+echo $?
 
-echo "install npm"
+head "install npm"
 npm install &>>log_file
+echo $?
 
-echo "enable and start the backend"
+head "enable and start the backend"
 systemctl daemon-reload &>>log_file
-
 systemctl enable backend &>>log_file
-
 systemctl start backend &>>log_file
+echo $?
 
-echo "install mysql"
+head "install mysql"
 dnf install mysql -y &>>log_file
+echo $?
 
-echo "loading schema"
+head "loading schema"
 mysql -h mysql.madhanmohanreddy.tech -uroot -pExpenseApp@1 < /app/schema/backend.sql &>>log_file
+echo $?

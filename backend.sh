@@ -1,4 +1,5 @@
 log_file=/tmp/expense.log
+mysql_password=$1
 
 head (){
   echo -e "\e[36m$1\e[0m"
@@ -59,5 +60,5 @@ dnf install mysql -y &>>log_file
 echo $?
 
 head "loading schema"
-mysql -h mysql.madhanmohanreddy.tech -uroot -pExpenseApp@1 < /app/schema/backend.sql &>>log_file
+mysql -h mysql.madhanmohanreddy.tech -uroot -p${mysql_password} < /app/schema/backend.sql &>>log_file
 echo $?

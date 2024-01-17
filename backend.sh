@@ -1,4 +1,5 @@
 mysql_password=$1
+component=backend
 source common.sh
 
 head "disable the nodejs"
@@ -16,19 +17,11 @@ echo $?
 head "adding the user"
 useradd expense &>>$log_file
 echo $?
-head "removing the default content"
-rm -rf /app &>>$log_file
-echo $?
-head "creating the directory"
-mkdir /app &>>$log_file
-echo $?
-head "download the backend content"
-curl -o /tmp/backend.zip https://expense-artifacts.s3.amazonaws.com/backend.zip &>>$log_file
-cd /app &>>$log_file
-echo $?
-head "extract the backend content"
-unzip /tmp/backend.zip &>>$log_file
-echo $?
+
+app_prereq "/app"
+
+
+
 head "install the required packages"
 npm install &>>$log_file
 echo $?

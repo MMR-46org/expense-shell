@@ -1,31 +1,47 @@
-dnf module disable nodejs -y
+log_file=/tmp/expense.log
 
-dnf module enable nodejs:18 -y
+echo "disable the nodejs"
+dnf module disable nodejs -y &>>log_file
 
-dnf install nodejs -y
+echo "enable the nodejs"
+dnf module enable nodejs:18 -y &>>log_file
 
-cp backend.service /etc/systemd/system/backend.service
+echo "install the nodejs"
+dnf install nodejs -y &>>log_file
 
-useradd expense
+echo "configure the backend service"
+cp backend.service /etc/systemd/system/backend.service &>>log_file
 
-rm -rf /app
+echo "adding user"
+useradd expense &>>log_file
 
-mkdir /app
+echo "removing the default content"
+rm -rf /app &>>log_file
 
-curl -o /tmp/backend.zip https://expense-artifacts.s3.amazonaws.com/backend.zip
+echo "create directory"
+mkdir /app &>>log_file
 
-cd /app
+echo "download the application content"
+curl -o /tmp/backend.zip https://expense-artifacts.s3.amazonaws.com/backend.zip &>>log_file
 
-unzip /tmp/backend.zip
+echo "change directory"
+cd /app &>>log_file
 
-npm install
+echo " extract the application content"
+unzip /tmp/backend.zip &>>log_file
 
-systemctl daemon-reload
+echo "install npm"
+npm install &>>log_file
 
-systemctl enable backend
+echo "enable and start the backend"
+systemctl daemon-reload &>>log_file
 
-systemctl start backend
+systemctl enable backend &>>log_file
 
-dnf install mysql -y
+systemctl start backend &>>log_file
 
-mysql -h mysql.madhanmohanreddy.tech -uroot -pExpenseApp@1 < /app/schema/backend.sql
+echo "install mysql"
+dnf install mysql -y &>>log_file
+
+echo "loading schema"
+mysql -h mysql.madhanmohanreddy.tech -uroot -pExpenseApp@1 < /app/schema/backend.sql &>>log_file

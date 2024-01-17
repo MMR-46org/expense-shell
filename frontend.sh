@@ -1,8 +1,4 @@
-log_file=/tmp/expense.log
-
-head(){
-  echo -e "\e[36m$1\e[0m"
-}
+source common.sh
 
 head "install nginx"
 dnf install nginx -y &>>$log_file

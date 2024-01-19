@@ -24,7 +24,10 @@ stat $?
 
 
 head "adding the user"
+id expense &>>log_file
+if [ "$?" -ne 0 ]; then
 useradd expense &>>log_file
+fi
 stat $?
 
 

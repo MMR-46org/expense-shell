@@ -29,7 +29,7 @@ app_pre(){
 }
 
 stat () {
-  if [ $? -eq 0 ];then
+  if [ "$?" -eq 0 ];then
     echo SUCCESS
   else
     echo FAILURE

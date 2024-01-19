@@ -6,85 +6,45 @@ source common.sh
 
 head "disable the nodejs"
 dnf module disable nodejs -y &>>log_file
-if [ $? -eq 0 ];then
-  echo SUCCESS
-else
-  echo FAILURE
-  exit 1
-fi
+stat $?
 
 head "enable the nodejs"
 dnf module enable nodejs:18 -y &>>log_file
-if [ $? -eq 0 ];then
-  echo SUCCESS
-else
-  echo FAILURE
-  exit 1
-fi
+stat $?
 
 
 head "install the nodejs"
 dnf install nodejs -y &>>log_file
-if [ $? -eq 0 ];then
-  echo SUCCESS
-else
-  echo FAILURE
-  exit 1
-fi
+stat $?
+
 
 head "config the backend service"
 cp backend.service /etc/systemd/system/backend.service &>>log_file
-if [ $? -eq 0 ];then
-  echo SUCCESS
-else
-  echo FAILURE
-  exit 1
-fi
+stat $?
+
 
 head "adding the user"
 useradd expense &>>log_file
-if [ $? -eq 0 ];then
-  echo SUCCESS
-else
-  echo FAILURE
-  exit 1
-fi
+stat $?
+
+
+app_pre "/app"
 
 
 head "install the software"
 npm install &>>log_file
-if [ $? -eq 0 ];then
-  echo SUCCESS
-else
-  echo FAILURE
-  exit 1
-fi
+stat $?
 
 head "reload the restart the backend"
 systemctl daemon-reload &>>log_file
 systemctl enable backend &>>log_file
 systemctl start backend &>>log_file
-if [ $? -eq 0 ];then
-  echo SUCCESS
-else
-  echo FAILURE
-  exit 1
-fi
+stat $?
 
 head "install mysql"
 dnf install mysql -y &>>log_file
-if [ $? -eq 0 ];then
-  echo SUCCESS
-else
-  echo FAILURE
-  exit 1
-fi
+stat $?
 
 head "reload the schema"
 mysql -h mysql.madhanmohanreddy.tech -uroot -p${mysql_password} < /app/schema/backend.sql &>>log_file
-if [ $? -eq 0 ];then
-  echo SUCCESS
-else
-  echo FAILURE
-  exit 1
-fi
+stat $?

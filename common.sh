@@ -9,21 +9,30 @@ app_pre(){
 
   head "removing the default content"
   rm -rf $1 &>>log_file
-  echo $?
+  stat $?
 
   head "create directory"
   mkdir $1 &>>log_file
-  echo $?
+  stat $?
 
   head "download the application content"
   curl -o /tmp/${component}.zip https://expense-artifacts.s3.amazonaws.com/${component}.zip &>>log_file
-  echo $?
+  stat $?
 
   cd $1
 
   head " extract the application content"
   unzip /tmp/${component}.zip &>>log_file
-  echo $?
+  stat $?
 
 
+}
+
+stat () {
+  if [ $? -eq 0 ];then
+    echo SUCCESS
+  else
+    echo FAILURE
+    exit 1
+  fi
 }

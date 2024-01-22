@@ -2,59 +2,27 @@ mysql_password=$1
 source common.sh
 
 if [ -z "$mysql_password" ];then
-  echo input mysql_password is missing
+  echo input mysql_password is missing &>>log_file
   exit 1
 fi
 
 head "disable the module mysql"
-dnf module disable mysql -y
-stat (){
-  if [ $? -eq 0 ];then
-    echo success
-  else
-    echo failure
-    exit 1
-  fi
-}
+dnf module disable mysql -y &>>log_file
+stat $?
 
 head "configure the repo file "
-cp mysql.repo /etc/yum.repos.d/mysql.repo
-stat(){
-  if [ $? -eq 0 ]; then
-    echo success
-  else
-    echo failure
-    exit 1
-  fi
-}
+cp mysql.repo /etc/yum.repos.d/mysql.repo &>>log_file
+stat $?
 
 head "install the mysql community"
-dnf install mysql-community-server -y
-stat(){
-  if [ $? -eq 0 ]; then
-    echo success
-  else
-    echo failure
-  fi
-}
+dnf install mysql-community-server -y &>>log_file
+stat $?
 
 head "enable and start mysqld"
-systemctl enable mysqld
-systemctl start mysqld
-stat() {
-  if [ $? -eq 0 ];then
-    echo success
-  else
-    echo failure
-  fi
-}
+systemctl enable mysqld &>>log_file
+systemctl start mysqld &>>log_file
+stat $?
 
 head "secure installation"
-mysql_secure_installation --set-root-pass ${mysql_password}
-stat() {
-  if [ $? -eq 0 ]; then
-    echo success
-  else
-    echo failure
-  fi
-}
+mysql_secure_installation --set-root-pass ${mysql_password} &>>log_file
+stat $?
